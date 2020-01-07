@@ -61,6 +61,7 @@ func ConfigHelp() {
 	fmt.Println()
 	fmt.Println(Yellow("Commands:"))
 	fmt.Println(Red("    ls                      列出现有的ssr配置文件"))
+	fmt.Println(Red("    ping                    获取所有配置服务器延迟"))
 	fmt.Println(Red("    sub http://demo.com     通过url进行订阅"))
 	fmt.Println(Red("    add ssr://cmM0LW...     通过ssr协议添加"))
 	fmt.Println(Red("    edit name               手动编辑配置文件，如果没有该配置则创建"))

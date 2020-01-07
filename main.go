@@ -40,7 +40,10 @@ func Start() {
 }
 
 func Stop() {
-	RunCommand("cd", installPath+"/shadowsocks")
+	err := os.Chdir(installPath + "/shadowsocks")
+	if err != nil {
+		fmt.Println(err)
+	}
 	RunCommand("sudo", "python", "local.py", "-d", "stop")
 }
 

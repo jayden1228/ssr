@@ -19,7 +19,7 @@ func main() {
 		case "uninstall":
 			UnInstallSSR()
 		case "config":
-			Config()
+			ConfigCommand()
 		case "start":
 			Start()
 		case "stop":

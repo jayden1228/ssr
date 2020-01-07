@@ -2,15 +2,23 @@ package main
 
 import (
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
+	"github.com/sparrc/go-ping"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"os/exec"
 	"strings"
 )
 
-func Config() {
+type Config struct {
+	Server     string `json:"server"`
+	ServerPort int64  `json:"server_port"`
+}
+
+func ConfigCommand() {
 	if len(os.Args) == 2 {
 		ConfigHelp()
 	} else if len(os.Args) > 2 {
@@ -31,10 +39,12 @@ func Config() {
 			}
 		case "edit":
 			if len(os.Args) > 3 {
-				writeConfigFileCustom(string(os.Args[3]))
+				EditConfigFileCustom(string(os.Args[3]))
 			} else {
 				fmt.Println(Red("ssr config new name 通过手动进行添加"))
 			}
+		case "ping":
+			PingConfigs()
 		default:
 			ConfigHelp()
 		}
@@ -145,7 +155,7 @@ func WriteSSRConfigFile(configString string) {
 	}
 }
 
-func writeConfigFileCustom(name string) {
+func EditConfigFileCustom(name string) {
 	if !strings.Contains(name, ".json") {
 		name += ".json"
 	}
@@ -156,5 +166,43 @@ func writeConfigFileCustom(name string) {
 	err := cmd.Run()
 	if err != nil {
 		fmt.Println(Red(err.Error()))
+	}
+}
+
+func GetConfigs() map[string]string {
+	files, err := ioutil.ReadDir(installPath + "/conf/")
+	if err != nil {
+		log.Fatal(err)
+	}
+	servers := make(map[string]string)
+	for _, file := range files {
+		jsonFile, err := os.Open(installPath + "/conf/" + file.Name())
+		defer jsonFile.Close()
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+		var config Config
+		byteValue, _ := ioutil.ReadAll(jsonFile)
+		json.Unmarshal(byteValue, &config)
+		if config.Server != "" {
+			key := strings.Replace(file.Name(), ".json", "", -1)
+			servers[key] = config.Server
+		}
+	}
+	return servers
+
+}
+func PingConfigs() {
+	services := GetConfigs()
+	for key, server := range services {
+		pinger, err := ping.NewPinger(server)
+		if err != nil {
+			panic(err)
+		}
+		pinger.Count = 1
+		pinger.Run()                 // blocks until finished
+		stats := pinger.Statistics() // get send/receive/rtt stats
+		fmt.Println(key + " => " + stats.AvgRtt.String())
 	}
 }

@@ -44,6 +44,7 @@ func CommandHelp() {
 	fmt.Println(Red("    config         配置ssr服务器"))
 	fmt.Println(Red("    start          开始ssr服务器"))
 	fmt.Println(Red("    stop           停止ssr服务器"))
+	fmt.Println(Red("    hp             终端 http 代理相关"))
 	fmt.Println()
 }
 

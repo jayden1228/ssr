@@ -33,14 +33,14 @@ func main() {
 
 func Start() {
 	if len(os.Args) > 2 {
-		RunCommand("sudo", "python", installPath+"/local.py", "-d", "start", "-c", installPath+"/conf/"+os.Args[2]+".json")
+		RunCommand("sudo", "python", installPath+"/shadowsocks/local.py", "-d", "start", "-c", installPath+"/conf/"+os.Args[2]+".json")
 	} else {
 		fmt.Println(Red("config name is required"))
 	}
 }
 
 func Stop() {
-	RunCommand("sudo", "python", installPath+"/local.py", "-d", "stop")
+	RunCommand("sudo", "python", installPath+"/shadowsocks/local.py", "-d", "stop")
 }
 
 func UnInstallSSR() {

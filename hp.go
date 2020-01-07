@@ -49,5 +49,6 @@ func InstallPrivoxy() {
 	if err != nil {
 		return
 	}
-	fmt.Println(Yellow("append \"http_proxy=http://127.0.0.1:8118 https_proxy=http://127.0.0.1:8118\" to your bash profile and run \"source ~/.zshrc\" ro \"source ~/.bashrc\""))
+	fmt.Println(Yellow("=============== Tips =============== "))
+	fmt.Println(Yellow("append \"http_proxy=http://127.0.0.1:8118 https_proxy=http://127.0.0.1:8118\" to your bash profile \n and run \"source ~/.zshrc\" or \"source ~/.bashrc\""))
 }

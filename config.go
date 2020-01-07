@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"runtime"
 	"strings"
 )
 
@@ -197,14 +198,18 @@ func GetConfigs() map[string]string {
 func PingConfigs() {
 	services := GetConfigs()
 	for key, server := range services {
-		pinger, err := ping.NewPinger(server)
-		if err != nil {
-			panic(err)
-		}
-		pinger.SetPrivileged(true)
-		pinger.Count = 1
-		pinger.Run()                 // blocks until finished
-		stats := pinger.Statistics() // get send/receive/rtt stats
-		fmt.Println(key + " => " + stats.AvgRtt.String())
+		go PingServer(key, server)
 	}
+}
+func PingServer(name string, server string) {
+	pinger, err := ping.NewPinger(server)
+	if err != nil {
+		panic(err)
+	}
+	pinger.SetPrivileged(true)
+	pinger.Count = 1
+	pinger.Run()                 // blocks until finished
+	stats := pinger.Statistics() // get send/receive/rtt stats
+	fmt.Println(name + " => " + stats.AvgRtt.String()
+	runtime.Gosched()
 }

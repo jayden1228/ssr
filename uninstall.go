@@ -4,7 +4,7 @@ import "github.com/manifoldco/promptui"
 
 func UnInstallSSR() {
 	prompt := promptui.Prompt{
-		Label:     "Delete Resource",
+		Label:     "是否确认卸载",
 		IsConfirm: true,
 	}
 	result, err := prompt.Run()
@@ -14,5 +14,6 @@ func UnInstallSSR() {
 	if result == "y" {
 		RunCommand("sudo", "rm", "-rf", installPath)
 		RunCommand("sudo", "apt", "remove", "-y", "privoxy")
+		//TODO 删除privoxy 配置
 	}
 }

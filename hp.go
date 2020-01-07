@@ -41,7 +41,7 @@ func InstallPrivoxy() {
 		return
 	}
 	// 配置 privoxy
-	err = RunCommand("sudo", "sh", "-c", "\"sudo echo -e 'forward-socks5 / 127.0.0.1:1080 .' >> /etc/privoxy/config\"")
+	err = RunCommand("sudo", "sh", "-c", "\"\"sudo echo -e 'forward-socks5 / 127.0.0.1:1080 .' >> /etc/privoxy/config\"\"")
 	if err != nil {
 		return
 	}

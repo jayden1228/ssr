@@ -40,7 +40,8 @@ func Start() {
 }
 
 func Stop() {
-	RunCommand("sudo", "python", installPath+"/shadowsocks/local.py", "-d", "stop")
+	RunCommand("cd", installPath+"/shadowsocks")
+	RunCommand("sudo", "python", "local.py", "-d", "stop")
 }
 
 func UnInstallSSR() {

@@ -208,6 +208,7 @@ func PingServer(name string, server string) {
 	if err != nil {
 		panic(err)
 	}
+	pinger.Timeout = 3
 	pinger.SetPrivileged(true)
 	pinger.Count = 1
 	pinger.Run()                 // blocks until finished

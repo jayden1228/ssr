@@ -197,9 +197,11 @@ func GetConfigs() map[string]string {
 }
 func PingConfigs() {
 	services := GetConfigs()
+	var logs string
 	for key, server := range services {
 		go PingServer(key, server)
 	}
+	fmt.Scan(&logs)
 }
 func PingServer(name string, server string) {
 	pinger, err := ping.NewPinger(server)

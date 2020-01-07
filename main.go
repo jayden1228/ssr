@@ -2,10 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/manifoldco/promptui"
 	"os"
 	"os/exec"
-	"strings"
 )
 
 var installPath = "/usr/local/share/shadowsocksr"
@@ -13,7 +11,7 @@ var ssrRepo = "https://github.com/shadowsocksr-backup/shadowsocksr.git"
 
 func main() {
 	if len(os.Args) == 1 {
-		showCommandHelp()
+		CommandHelp()
 	} else if len(os.Args) > 1 {
 		switch os.Args[1] {
 		case "install":
@@ -26,91 +24,27 @@ func main() {
 			Start()
 		case "stop":
 			Stop()
+		case "hp":
+			Hp()
 		default:
-			showCommandHelp()
+			CommandHelp()
 		}
 	}
 }
 
-func Start() {
-	if len(os.Args) > 2 {
-		err := os.Chdir(installPath + "/shadowsocks")
-		if err != nil {
-			fmt.Println(err)
-		}
-		name := os.Args[2]
-		if !strings.Contains(name, ".json") {
-			name += ".json"
-		}
-		RunCommand("sudo", "python", "local.py", "-d", "start", "-c", installPath+"/conf/"+name)
-	} else {
-		fmt.Println(Red("config name is required"))
-	}
-}
-
-func Stop() {
-	err := os.Chdir(installPath + "/shadowsocks")
-	if err != nil {
-		fmt.Println(err)
-	}
-	RunCommand("sudo", "python", "local.py", "-d", "stop")
-}
-
-func UnInstallSSR() {
-	prompt := promptui.Prompt{
-		Label:     "Delete Resource",
-		IsConfirm: true,
-	}
-
-	result, err := prompt.Run()
-
-	if err != nil {
-		return
-	}
-
-	if result == "y" {
-		RunCommand("sudo", "rm", "-rf", installPath)
-		RunCommand("sudo", "apt", "remove", "-y", "privoxy")
-	}
-}
-func InstallSSR() {
-	// 克隆ssr库
-	err := RunCommand("sudo", "git", "clone", "-b", "manyuser", ssrRepo, installPath)
-	if err != nil {
-		return
-	}
-
-	// 安装 privoxy
-	err = RunCommand("sudo", "apt-get", "update")
-	if err != nil {
-		return
-	}
-	err = RunCommand("sudo", "apt-get", "-y", "install", "privoxy")
-	if err != nil {
-		return
-	}
-	// 配置 privoxy
-	err = RunCommand("sudo", "sh", "-c", "\"sudo echo -e 'forward-socks5 / 127.0.0.1:1080 .' >> /etc/privoxy/config\"")
-	if err != nil {
-		return
-	}
-	err = RunCommand("sudo", "service", "privoxy", "restart")
-	if err != nil {
-		return
-	}
-	err = RunCommand("sudo", "sh", "-c", "\"sudo echo -e 'alias hp=\"http_proxy=http://127.0.0.1:8118 https_proxy=http://127.0.0.1:8118\"' >> ~/.zshrc\"")
-	if err != nil {
-		return
-	}
-	err = RunCommand("chsh", "-s", "/bin/zsh", "source", "~/.zshrc")
-	if err != nil {
-		return
-	}
-
-	err = RunCommand("sudo", "mkdir", "/usr/local/share/shadowsocksr/conf/")
-	if err != nil {
-		return
-	}
+func CommandHelp() {
+	fmt.Println("SSR 助手工具")
+	fmt.Println()
+	fmt.Println(Yellow("Usage:"))
+	fmt.Println(Blue("    ssr <command> [--parameter1=value1 --parameter2=value2 ...]"))
+	fmt.Println()
+	fmt.Println(Yellow("Commands:"))
+	fmt.Println(Red("    install        安装ssr软件"))
+	fmt.Println(Red("    uninstall      卸载ssr软件"))
+	fmt.Println(Red("    config         配置ssr服务器"))
+	fmt.Println(Red("    start          开始ssr服务器"))
+	fmt.Println(Red("    stop           停止ssr服务器"))
+	fmt.Println()
 }
 
 func RunCommand(name string, arg ...string) error {

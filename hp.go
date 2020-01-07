@@ -35,7 +35,6 @@ func InstallPrivoxy() {
 	// 安装 privoxy
 	err := RunCommand("sudo", "apt-get", "update")
 	if err != nil {
-		return
 	}
 	err = RunCommand("sudo", "apt-get", "-y", "install", "privoxy")
 	if err != nil {

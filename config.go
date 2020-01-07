@@ -210,6 +210,6 @@ func PingServer(name string, server string) {
 	pinger.Count = 1
 	pinger.Run()                 // blocks until finished
 	stats := pinger.Statistics() // get send/receive/rtt stats
-	fmt.Println(name + " => " + stats.AvgRtt.String()
+	fmt.Println(name + " => " + stats.AvgRtt.String())
 	runtime.Gosched()
 }

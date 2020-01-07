@@ -201,6 +201,7 @@ func PingConfigs() {
 		if err != nil {
 			panic(err)
 		}
+		pinger.SetPrivileged(true)
 		pinger.Count = 1
 		pinger.Run()                 // blocks until finished
 		stats := pinger.Statistics() // get send/receive/rtt stats

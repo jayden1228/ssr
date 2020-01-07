@@ -33,7 +33,11 @@ func main() {
 
 func Start() {
 	if len(os.Args) > 2 {
-		RunCommand("sudo", "python", installPath+"/shadowsocks/local.py", "-d", "start", "-c", installPath+"/conf/"+os.Args[2]+".json")
+		err := os.Chdir(installPath + "/shadowsocks")
+		if err != nil {
+			fmt.Println(err)
+		}
+		RunCommand("sudo", "python", "local.py", "-d", "start", "-c", installPath+"/conf/"+os.Args[2]+".json")
 	} else {
 		fmt.Println(Red("config name is required"))
 	}

@@ -5,6 +5,7 @@ import (
 	"github.com/manifoldco/promptui"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 var installPath = "/usr/local/share/shadowsocksr"
@@ -37,7 +38,11 @@ func Start() {
 		if err != nil {
 			fmt.Println(err)
 		}
-		RunCommand("sudo", "python", "local.py", "-d", "start", "-c", installPath+"/conf/"+os.Args[2]+".json")
+		name := os.Args[2]
+		if !strings.Contains(name, ".json") {
+			name += ".json"
+		}
+		RunCommand("sudo", "python", "local.py", "-d", "start", "-c", installPath+"/conf/"+name)
 	} else {
 		fmt.Println(Red("config name is required"))
 	}

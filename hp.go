@@ -1,9 +1,34 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
 func Hp() {
+	if len(os.Args) == 2 {
+		HpHelp()
+	} else if len(os.Args) > 2 {
+		switch os.Args[2] {
+		case "install":
+			InstallPrivoxy()
+		default:
+			HpHelp()
+		}
+	} else {
+		HpHelp()
+	}
+}
 
+func HpHelp() {
+	fmt.Println("命令行 hp http 代理配置工具")
+	fmt.Println()
+	fmt.Println(Yellow("Usage:"))
+	fmt.Println(Blue("    ssr hp <command> [--parameter1=value1 --parameter2=value2 ...]"))
+	fmt.Println()
+	fmt.Println(Yellow("Commands:"))
+	fmt.Println(Red("    install        安装 http 代理软件"))
+	fmt.Println()
 }
 
 func InstallPrivoxy() {
